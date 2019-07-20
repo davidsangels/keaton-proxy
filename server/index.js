@@ -6,10 +6,10 @@ const httpProxy = require('http-proxy');
 const apiProxy = httpProxy.createProxyServer();
 const reservationServer = 'http://13.57.205.162';
 // const reservationServer = 'http://localhost:3001';
-// const reviewsServer = 'http://localhost:3003';
-// const data = 'http://localhost:3002';
+const reviewsServer = 'http://18.224.181.77';
+const data = 'http://13.56.158.243';
 
-app.use(express.static(path.resolve(__dirname, '..', 'public')));
+app.use('/:idPlace', express.static(path.resolve(__dirname, '..', 'public')));
 app.use(morgan('dev'));
 
 app.get('/something', (req ,res) => {
@@ -17,33 +17,28 @@ app.get('/something', (req ,res) => {
   res.send('helloasfasdfasdf');
 })
 
-app.get('/bookings', (req, res) => {
+app.get('/bookings/:idPlace', (req, res) => {
     apiProxy.web(req, res, {target: reservationServer});
 });
 
-// app.get('/api/places', (req, res) => {
-//   apiProxy.web(req, res, {target: reviewsServer});
-// });
+app.get('/reviews/:idPlace', (req, res) => {
+  apiProxy.web(req, res, {target: reviewsServer});
+});
   
-//   // Get all the reviews for a specific place
-// app.get('/api/reviews/:idPlace', (req, res) => {
-//   apiProxy.web(req, res, {target: reviewsServer});
-// });
+  // Get all the reviews for a specific place
+app.get('/reviews/ratings/:idPlace', (req, res) => {
+  apiProxy.web(req, res, {target: reviewsServer});
+});
 
-// // Get all the ratings for a specific place
-// app.get('/api/ratings/:idPlace', (req, res) => {
-//   apiProxy.web(req, res, {target: reviewsServer});
-// });
+// Get all the ratings for a specific place
+app.get('/reviews/search/:idPlace/:query', (req, res) => {
+  apiProxy.web(req, res, {target: reviewsServer});
+});
 
-// // Get all the reviews for a specific query and a specific idPlace
-// app.get('/api/reviews/search/:idPlace/:query', (req, res) => {
-//   apiProxy.web(req, res, {target: reviewsServer});
-// });
-
-// //David's image data
-// app.get('/data', (req , res) => {
-//     apiProxy.web(req, res, {target: data});
-// });
+//David's image data
+app.get('/data', (req , res) => {
+    apiProxy.web(req, res, {target: data});
+});
 
 app.listen(3000, () => {
   console.log('qwerqwer');
