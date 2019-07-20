@@ -36,7 +36,7 @@ app.get('/reviews/search/:idPlace/:query', (req, res) => {
 });
 
 //David's image data
-app.get('/data', (req , res) => {
+app.get('/data/:id', (req , res) => {
     apiProxy.web(req, res, {target: data});
 });
 
